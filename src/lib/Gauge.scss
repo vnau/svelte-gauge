@@ -1,0 +1,63 @@
+.gauge-container {
+  position: relative;
+  aspect-ratio: 1;
+}
+
+.gauge-svg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+
+.gauge-circle {
+  fill: white;
+  stroke: var(--stroke-color, lightgray);
+  opacity: 0.3;
+  stroke-width: var(--gauge-stroke);
+}
+
+.gauge-range-bg {
+  fill: none;
+  stroke: var(--stroke-color, lightgray);
+  stroke-width: var(--gauge-stroke);
+  stroke-linecap: round;
+}
+
+.gauge-range {
+  fill: none;
+  stroke: white;
+  stroke-width: calc(var(--gauge-stroke) - 2px);
+  stroke-linecap: round;
+  opacity: 0.5;
+}
+
+.gauge-handle {
+  fill: white;
+  stroke: var(--stroke-color, lightgray);
+  stroke-width: 1px;
+  transition: r 0.3s ease-out;
+}
+
+.gauge-title-curve {
+  fill: none;
+  stroke: none;
+}
+
+.titles-container {
+  color: currentColor;
+  font-family: "Calibri", sans-serif;
+  font-size: 20px;
+  font-weight: 200;
+
+  text:not(:first-of-type) {
+    color: lightslategray;
+    font-size: 14px;
+  }
+}
+
+.slot-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  padding: calc(var(--gauge-stroke) + var(--gauge-border));
+}
