@@ -4,6 +4,7 @@
 }
 
 .gauge-svg {
+  left: 0;
   width: 100%;
   height: 100%;
   position: absolute;
@@ -56,8 +57,17 @@
 }
 
 .slot-container {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  padding: calc(var(--gauge-stroke) + var(--gauge-border));
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: relative;
+  line-height: normal;
+  text-align: center;
+  padding: calc(var(--gauge-stroke) + var(--gauge-border))
+}
+
+.slot-content {
+  font-size: calc((var(--gauge-radius) - 2 * (var(--gauge-stroke) - var(--gauge-border)))/2);
+  font-family: 'Calibri';
+  font-weight: 100;
 }

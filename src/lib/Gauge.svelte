@@ -2,27 +2,37 @@
   import { onMount } from "svelte";
   import { tweened } from "svelte/motion";
   import { elasticOut } from "svelte/easing";
-  import { calcCurvePath, polarToCartesian, valueToAngle } from "./util.js";
+  import {
+    calcCurvePath,
+    getTitleAngle,
+    polarToCartesian,
+    valueToAngle,
+  } from "./util.js";
 
-  export let value: number;
+  export let easing: (v: number) => number = elasticOut;
+  export let value: number | undefined;
   export let width: number | string | undefined = undefined;
   export let start: number = 0;
   export let stop: number = 100;
-  export let className: string = "";
+  export let startAngle: number = 0;
+  export let stopAngle: number = 2 * Math.PI;
+  export let titleAngle: number = 0;
+  let className: string | undefined = undefined;
   export let stroke: number = 20;
   export let titles: string[] = [];
   export let ranges: [number, number][] = [];
-
+  export { className as class };
   let clientWidth: number;
   let clientHeight: number;
   let visible = false;
 
   // Check if any title is present
   const border = titles.some(Boolean) ? 16 : 0;
+  const uuid = Math.random().toString(36).slice(-6);
 
   // Animated value with easing
-  const animatedValue = tweened(start, { duration: 1000, easing: elasticOut });
-  $: animatedValue.set(value);
+  const animatedValue = tweened(start, { duration: 1000, easing: easing });
+  $: animatedValue.set(value ?? 0);
 
   // Set visibility on mount for animations
   onMount(() => (visible = true));
@@ -32,7 +42,7 @@
     return {
       duration: 1000 + Math.random() * 300,
       css: (t: number) => {
-        const eased = elasticOut(t);
+        const eased = easing(t);
         return `transform: rotate(${eased * 360}deg); transform-origin: 50% 50%;`;
       },
     };
@@ -55,29 +65,28 @@
     {@const handlePos = polarToCartesian(
       radius,
       borderAdjusted,
-      valueToAngle($animatedValue, start, stop)
+      valueToAngle($animatedValue, start, stop, startAngle, stopAngle)
     )}
 
     <svg class="gauge-svg" xmlns="http://www.w3.org/2000/svg">
       <!-- Background Circle -->
-      <circle
+      <path
         class="gauge-circle"
-        cx={radius}
-        cy={radius}
-        r={radius - stroke / 2 - border}
+        d={calcCurvePath(radius, borderAdjusted, startAngle, stopAngle)}
       />
 
       <!-- Value Background -->
-      <path
-        class="gauge-range-bg"
-        d={calcCurvePath(
-          radius,
-          borderAdjusted,
-          0,
-          valueToAngle($animatedValue, start, stop)
-        )}
-      />
-
+      {#if value != undefined || $animatedValue != 0}
+        <path
+          class="gauge-range-bg"
+          d={calcCurvePath(
+            radius,
+            borderAdjusted,
+            startAngle,
+            valueToAngle($animatedValue, start, stop, startAngle, stopAngle)
+          )}
+        />
+      {/if}
       {#each ranges as range, index}
         {#each ["gauge-range-bg", "gauge-range"] as cls, index}
           <path
@@ -86,20 +95,22 @@
             d={calcCurvePath(
               radius,
               borderAdjusted,
-              valueToAngle(range[0], start, stop),
-              valueToAngle(range[1], start, stop)
+              valueToAngle(range[0], start, stop, startAngle, stopAngle),
+              valueToAngle(range[1], start, stop, startAngle, stopAngle)
             )}
           />
         {/each}
       {/each}
 
       <!-- Handle -->
-      <circle
-        class="gauge-handle"
-        cx={handlePos.x}
-        cy={handlePos.y}
-        r={stroke / 2}
-      />
+      {#if value != undefined || $animatedValue != 0}
+        <circle
+          class="gauge-handle"
+          cx={handlePos.x}
+          cy={handlePos.y}
+          r={stroke / 2}
+        />
+      {/if}
 
       <!-- Titles -->
       {#if visible}
@@ -107,17 +118,21 @@
           {#each titles as title, index}
             <path
               class="gauge-title-curve"
-              id={`title${index}`}
+              id={`title-${uuid}-${index}`}
               d={calcCurvePath(
                 radius,
                 border - 2,
-                ((index + 1) / titles.length) * 2 * Math.PI,
-                ((index + 2) / titles.length) * 2 * Math.PI
+                titleAngle +
+                  getTitleAngle(startAngle, stopAngle, index, titles.length) -
+                  Math.PI / 2,
+                titleAngle +
+                  getTitleAngle(startAngle, stopAngle, index, titles.length) +
+                  Math.PI / 2
               )}
             />
             <text>
               <textPath
-                xlink:href={`#title${index}`}
+                xlink:href={`#title-${uuid}-${index}`}
                 startOffset="50%"
                 text-anchor="middle"
               >
@@ -128,13 +143,22 @@
         </g>
       {/if}
     </svg>
-
     <div class="slot-container">
-      <slot />
+      <slot
+        value={$animatedValue === 0 && value === undefined
+          ? undefined
+          : $animatedValue}
+      >
+        <span class="slot-content"
+          >{$animatedValue === 0 && value === undefined
+            ? "NaN"
+            : Math.round($animatedValue)}</span
+        >
+      </slot>
     </div>
   {/if}
 </div>
 
-<style>
-  @import "./Gauge.scss";
+<style lang="scss">
+  @use "./Gauge.scss";
 </style>
