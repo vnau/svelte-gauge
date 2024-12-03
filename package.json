@@ -5,7 +5,7 @@
 	"homepage": "https://github.com/vnau/svelte-gauge#readme",
 	"repository": "https://github.com/vnau/svelte-gauge",
 	"license": "MIT",
-	"version": "0.0.7",
+	"version": "1.0.0",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build && npm run package",
