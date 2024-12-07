@@ -1,14 +1,29 @@
-<script>
-  import Gauge from "$lib/Gauge.svelte";
+<script lang="ts">
+  import Clock from "../components/Clock.svelte";
+  import Indicator from "../components/Indicator.svelte";
+  import Neon from "../components/Neon.svelte";
+  import Progress from "../components/Progress.svelte";
+  import Speedometer from "../components/Speedometer.svelte";
 </script>
 
-<h1>svelte.gauge</h1>
-<p>Gauge component for Svelte</p>
+<div>
+  <h1>svelte.gauge</h1>
+  <div class="demo-container">
+    <Neon />
+    <Progress />
+    <Indicator />
+    <Speedometer />
+    <Clock />
+  </div>
+</div>
 
-<Gauge
-  width={300}
-  value={34}
-  ranges={[[45, 55]]}
-  titles={["Title 1", "Title 2", "Title 3"]}
-  --stroke-color="#f2c894"
-></Gauge>
+<style lang="scss">
+  .demo-container {
+    display: flex;
+    font-family: "Calibri", sans-serif;
+    font-weight: 100;
+    color: white;
+    fill: white;
+    background-color: black;
+  }
+</style>
