@@ -20,10 +20,11 @@
 <style lang="scss">
   .demo-container {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     font-family: "Calibri", sans-serif;
     font-weight: 100;
     color: white;
     fill: white;
-    background-color: black;
   }
 </style>

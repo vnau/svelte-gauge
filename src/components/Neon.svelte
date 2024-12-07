@@ -36,7 +36,6 @@
 
 <style lang="scss">
   :global(.gauge-dotted) {
-    background-image: linear-gradient(135deg, #000000 0%, #000000 100%);
     color: var(--stroke-color);
     :global(.gauge-circle) {
       stroke: #777777;

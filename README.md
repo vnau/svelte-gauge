@@ -7,6 +7,8 @@
 
 A customizable and animated gauge component built with Svelte, perfect for visualizing progress, performance metrics, or other numerical data.
 
+<img width="100%" alt="svelte.gauge preview" src="images/banner.png">
+
 ## Installation
 
 Install the package via npm:
