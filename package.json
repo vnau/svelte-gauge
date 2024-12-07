@@ -41,7 +41,7 @@
 		"@sveltejs/adapter-static": "^3.0.5",
 		"@sveltejs/kit": "^2.7.2",
 		"@sveltejs/package": "2.3.5",
-		"@sveltejs/vite-plugin-svelte": "3.0.2",
+		"@sveltejs/vite-plugin-svelte": "3.1.2",
 		"eslint-plugin-svelte": "^2.36.0",
 		"eslint": "^9.7.0",
 		"globals": "^15.0.0",
