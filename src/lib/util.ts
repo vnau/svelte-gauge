@@ -2,23 +2,34 @@
 export const clamp = (value: number, min: number, max: number): number =>
     Math.max(min, Math.min(max, value));
 
-// Scale value
-export const scale = (value: number, start: number, stop: number, targetStart: number, targetStop: number): number =>
-    targetStart + (targetStop - targetStart) * (clamp(value, start, stop) - start) / (stop - start);
+export const scale = (
+    value: number,
+    start: number,
+    stop: number,
+    targetStart: number,
+    targetStop: number
+): number =>
+    targetStart + ((targetStop - targetStart) * (clamp(value, start, stop) - start)) / (stop - start);
 
 // Calculate title offset based on index and total count
-export const getTitleOffset = (startAngle: number, stopAngle: number, index: number, count: number): number => {
+export const getTitleOffset = (
+    startAngle: number,
+    stopAngle: number,
+    index: number,
+    count: number
+): number => {
     const fullCircle = 360;
     const isCircleGauge = Math.abs(stopAngle - startAngle - fullCircle) < 0.001;
     const normalizedIndex = index / (count - (isCircleGauge || count === 1 ? 0 : 1));
-    const angle = normalizedIndex * fullCircle;
-
-    // Offset calculation based on proportional angle
-    return Math.abs(25 + (50 * angle) / fullCircle);
+    return 25 + (50 * normalizedIndex); // Simplified formula
 };
 
 // Convert polar coordinates to Cartesian
-export const polarToCartesian = (radius: number, offset: number, angle: number): { x: string; y: string } => {
+export const polarToCartesian = (
+    radius: number,
+    offset: number,
+    angle: number
+): { x: string; y: string } => {
     const adjustedRadius = radius - offset;
     return {
         x: (radius - adjustedRadius * Math.sin(angle)).toFixed(3),
@@ -28,8 +39,9 @@ export const polarToCartesian = (radius: number, offset: number, angle: number):
 
 // Generate SVG path for an arc
 export const calcCurvePath = (radius: number, offset: number, startAngle: number, endAngle: number): string => {
-    const startRad = startAngle * Math.PI / 180;
-    const endRad = endAngle * Math.PI / 180;
+    const toRadians = (angle: number) => (angle * Math.PI) / 180;
+    const startRad = toRadians(startAngle);
+    const endRad = toRadians(endAngle);
 
     const startPoint = polarToCartesian(radius, offset, startRad);
 
@@ -53,3 +65,10 @@ export const calcCurvePath = (radius: number, offset: number, startAngle: number
 
     return cmd;
 };
+
+// Define a type for the display value handler
+export type DisplayValueHandler = (args: {
+    value: number | undefined;
+    animatedValue: number;
+    formattedValue: string;
+}) => string;

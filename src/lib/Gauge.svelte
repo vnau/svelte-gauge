@@ -7,10 +7,13 @@
     getTitleOffset,
     polarToCartesian,
     scale,
+    type DisplayValueHandler,
   } from "./util.js";
 
   export let easing: (v: number) => number = cubicOut;
   export let value: number | undefined;
+  export let displayValue: string | DisplayValueHandler = (v) =>
+    v.formattedValue;
   export let width: number | string | undefined = undefined;
   export let start: number = 0;
   export let stop: number = 100;
@@ -95,7 +98,7 @@
 
       <!-- Titles -->
       {#if visible}
-        <text in:spin class="titles-container">
+        <text class="titles-container">
           {#each titles as title, index}
             <textPath
               xlink:href="#title-path-{uuid}"
@@ -118,9 +121,16 @@
             y="50%"
             dominant-baseline="middle"
             text-anchor="middle"
-            >{$animatedValue === 0 && value === undefined
-              ? "NaN"
-              : Math.round($animatedValue)}</text
+            >{typeof displayValue === "string"
+              ? displayValue
+              : displayValue({
+                  value: value,
+                  animatedValue: $animatedValue,
+                  formattedValue:
+                    $animatedValue === 0 && value === undefined
+                      ? "NaN"
+                      : Math.round($animatedValue).toString(),
+                })}</text
           >
         {/if}
       {/if}
