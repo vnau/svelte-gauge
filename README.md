@@ -38,7 +38,7 @@ Import the component and use it in your Svelte application:
     [67, 100],
   ]}
   width="300px"
-  className="custom-gauge"
+  class="custom-gauge"
 />
 
 ```
