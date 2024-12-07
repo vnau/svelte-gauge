@@ -8,7 +8,7 @@
 		"url": "git+https://github.com/vnau/svelte-gauge.git"
 	},
 	"license": "MIT",
-	"version": "1.1.0",
+	"version": "1.1.2",
 	"keywords": [
 		"component-library",
 		"components-library",
