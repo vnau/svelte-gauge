@@ -11,7 +11,7 @@
 }
 
 .gauge-circle {
-  fill: white;
+  fill: none;
   stroke: var(--stroke-color, lightgray);
   opacity: 0.3;
   stroke-width: var(--gauge-stroke);
@@ -39,35 +39,22 @@
   transition: r 0.3s ease-out;
 }
 
-.gauge-title-curve {
-  fill: none;
-  stroke: none;
-}
-
 .titles-container {
-  color: currentColor;
-  font-family: "Calibri", sans-serif;
-  font-size: 20px;
-  font-weight: 200;
-
-  text:not(:first-of-type) {
-    color: lightslategray;
-    font-size: 14px;
-  }
+  fill: currentcolor;
 }
 
 .slot-container {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  position: relative;
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  margin: calc(var(--gauge-stroke) + var(--gauge-border));
   line-height: normal;
   text-align: center;
-  padding: calc(var(--gauge-stroke) + var(--gauge-border))
 }
 
 .slot-content {
-  font-size: calc((var(--gauge-radius) - 2 * (var(--gauge-stroke) - var(--gauge-border)))/2);
-  font-family: 'Calibri';
-  font-weight: 100;
+  fill: currentColor;
+  font-size: calc((var(--gauge-radius) - 2 * (var(--gauge-stroke) - var(--gauge-border)))/3);
 }

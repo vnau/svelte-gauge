@@ -1,26 +1,26 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { tweened } from "svelte/motion";
-  import { elasticOut } from "svelte/easing";
+  import { cubicOut } from "svelte/easing";
   import {
     calcCurvePath,
-    getTitleAngle,
+    getTitleOffset,
     polarToCartesian,
-    valueToAngle,
+    scale,
   } from "./util.js";
 
-  export let easing: (v: number) => number = elasticOut;
+  export let easing: (v: number) => number = cubicOut;
   export let value: number | undefined;
   export let width: number | string | undefined = undefined;
   export let start: number = 0;
   export let stop: number = 100;
   export let startAngle: number = 0;
-  export let stopAngle: number = 2 * Math.PI;
+  export let stopAngle: number = 360;
   export let titleAngle: number = 0;
-  let className: string | undefined = undefined;
   export let stroke: number = 20;
   export let titles: string[] = [];
   export let ranges: [number, number][] = [];
+  let className: string | undefined = undefined;
   export { className as class };
   let clientWidth: number;
   let clientHeight: number;
@@ -65,10 +65,66 @@
     {@const handlePos = polarToCartesian(
       radius,
       borderAdjusted,
-      valueToAngle($animatedValue, start, stop, startAngle, stopAngle)
+      (scale($animatedValue, start, stop, startAngle, stopAngle) * Math.PI) /
+        180
     )}
 
     <svg class="gauge-svg" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        {#each ranges as range, index}
+          <path
+            id={`range-${index}-${uuid}`}
+            d={calcCurvePath(
+              radius,
+              borderAdjusted,
+              scale(range[0], start, stop, startAngle, stopAngle),
+              scale(range[1], start, stop, startAngle, stopAngle)
+            )}
+          />
+        {/each}
+        <path
+          id="title-path-{uuid}"
+          d={calcCurvePath(
+            radius,
+            border - 2,
+            titleAngle + startAngle - (stopAngle - startAngle) / 2.001,
+            titleAngle + stopAngle + (stopAngle - startAngle) / 2.001
+          )}
+        />
+      </defs>
+
+      <!-- Titles -->
+      {#if visible}
+        <text in:spin class="titles-container">
+          {#each titles as title, index}
+            <textPath
+              xlink:href="#title-path-{uuid}"
+              startOffset="{getTitleOffset(
+                startAngle,
+                stopAngle,
+                index,
+                titles.length
+              )}%"
+              text-anchor="middle"
+            >
+              {title}
+            </textPath>
+          {/each}
+        </text>
+        {#if !$$slots.default}
+          <text
+            class="slot-content"
+            x="50%"
+            y="50%"
+            dominant-baseline="middle"
+            text-anchor="middle"
+            >{$animatedValue === 0 && value === undefined
+              ? "NaN"
+              : Math.round($animatedValue)}</text
+          >
+        {/if}
+      {/if}
+
       <!-- Background Circle -->
       <path
         class="gauge-circle"
@@ -83,23 +139,13 @@
             radius,
             borderAdjusted,
             startAngle,
-            valueToAngle($animatedValue, start, stop, startAngle, stopAngle)
+            scale($animatedValue, start, stop, startAngle, stopAngle)
           )}
         />
       {/if}
       {#each ranges as range, index}
-        {#each ["gauge-range-bg", "gauge-range"] as cls, index}
-          <path
-            id={`${cls}${index}`}
-            class={cls}
-            d={calcCurvePath(
-              radius,
-              borderAdjusted,
-              valueToAngle(range[0], start, stop, startAngle, stopAngle),
-              valueToAngle(range[1], start, stop, startAngle, stopAngle)
-            )}
-          />
-        {/each}
+        <use href="#range-{index}-{uuid}" class="gauge-range-bg"></use>
+        <use href="#range-{index}-{uuid}" class="gauge-range"></use>
       {/each}
 
       <!-- Handle -->
@@ -111,51 +157,16 @@
           r={stroke / 2}
         />
       {/if}
-
-      <!-- Titles -->
-      {#if visible}
-        <g in:spin class="titles-container">
-          {#each titles as title, index}
-            <path
-              class="gauge-title-curve"
-              id={`title-${uuid}-${index}`}
-              d={calcCurvePath(
-                radius,
-                border - 2,
-                titleAngle +
-                  getTitleAngle(startAngle, stopAngle, index, titles.length) -
-                  Math.PI / 2,
-                titleAngle +
-                  getTitleAngle(startAngle, stopAngle, index, titles.length) +
-                  Math.PI / 2
-              )}
-            />
-            <text>
-              <textPath
-                xlink:href={`#title-${uuid}-${index}`}
-                startOffset="50%"
-                text-anchor="middle"
-              >
-                {title}
-              </textPath>
-            </text>
-          {/each}
-        </g>
-      {/if}
     </svg>
-    <div class="slot-container">
-      <slot
-        value={$animatedValue === 0 && value === undefined
-          ? undefined
-          : $animatedValue}
-      >
-        <span class="slot-content"
-          >{$animatedValue === 0 && value === undefined
-            ? "NaN"
-            : Math.round($animatedValue)}</span
-        >
-      </slot>
-    </div>
+    {#if !!$$slots.default}
+      <div class="slot-container">
+        <slot
+          value={$animatedValue === 0 && value === undefined
+            ? undefined
+            : $animatedValue}
+        />
+      </div>
+    {/if}
   {/if}
 </div>
 
