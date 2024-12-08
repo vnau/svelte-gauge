@@ -9,7 +9,12 @@ A customizable and animated gauge component built with Svelte, perfect for visua
 
 <img width="100%" alt="svelte.gauge preview" src="images/banner.png">
 
-## Installation
+## 🎮 Demo
+
+Experience the Svelte Gauge in action:
+[Try it in the Svelte Playground](https://svelte.dev/playground/8e9390da303a4e33a5e53d431ed0df94?version=5.9.0)
+
+## 📦 Installation
 
 Install the package via npm:
 
@@ -17,7 +22,7 @@ Install the package via npm:
 npm install svelte-gauge
 ```
 
-## Usage
+## 🛠 Usage
 
 Import the component and use it in your Svelte application:
 
