@@ -139,14 +139,12 @@
       <path
         class="gauge-circle"
         d={calcCurvePath(radius, borderAdjusted, startAngle, stopAngle)}
-        stroke-linecap="round"
       />
 
       <!-- Value Background -->
       {#if value != undefined || $animatedValue != 0}
         <path
           class="gauge-range-bg"
-          stroke-linecap="round"
           d={calcCurvePath(
             radius,
             borderAdjusted,
