@@ -27,4 +27,11 @@
     color: white;
     fill: white;
   }
+
+  h1 {
+    text-align: center;
+    font-weight: 100;
+    font-style: normal;
+    font-size: 4em;
+  }
 </style>

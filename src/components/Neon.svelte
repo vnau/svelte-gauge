@@ -56,5 +56,9 @@
     :global(.gauge-handle) {
       display: none;
     }
+
+    :global(.gauge-circle) {
+      stroke-linecap: butt;
+    }
   }
 </style>
