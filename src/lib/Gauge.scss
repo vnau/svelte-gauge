@@ -15,6 +15,7 @@
   stroke: var(--stroke-color, lightgray);
   opacity: 0.3;
   stroke-width: var(--gauge-stroke);
+  stroke-linecap: round;
 }
 
 .gauge-range-bg {
