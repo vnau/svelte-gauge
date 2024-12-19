@@ -3,48 +3,52 @@
   aspect-ratio: 1;
 }
 
-.gauge-svg {
+.gauge-visual {
   left: 0;
   width: 100%;
   height: 100%;
   position: absolute;
 }
 
-.gauge-circle {
+.gauge-arc {
   fill: none;
   stroke: var(--stroke-color, lightgray);
+  stroke-linecap: round;
+  stroke-width: var(--gauge-stroke);
+}
+
+.gauge-background {
+  @extend .gauge-arc;
   opacity: 0.3;
-  stroke-width: var(--gauge-stroke);
-  stroke-linecap: round;
 }
 
-.gauge-range-bg {
-  fill: none;
-  stroke: var(--stroke-color, lightgray);
-  stroke-width: var(--gauge-stroke);
-  stroke-linecap: round;
+.gauge-segment-bg {
+  @extend .gauge-arc;
 }
 
-.gauge-range {
-  fill: none;
+.gauge-progress {
+  @extend .gauge-arc;
+}
+
+.gauge-segment {
+  @extend .gauge-arc;
   stroke: white;
   stroke-width: calc(var(--gauge-stroke) - 2px);
-  stroke-linecap: round;
   opacity: 0.5;
 }
 
-.gauge-handle {
+.gauge-indicator {
   fill: white;
   stroke: var(--stroke-color, lightgray);
   stroke-width: 1px;
   transition: r 0.3s ease-out;
 }
 
-.titles-container {
+.gauge-titles {
   fill: currentcolor;
 }
 
-.slot-container {
+.gauge-slot-container {
   position: absolute;
   left: 0;
   top: 0;
@@ -55,7 +59,7 @@
   text-align: center;
 }
 
-.slot-content {
+.gauge-slot-content {
   fill: currentColor;
   font-size: calc((var(--gauge-radius) - 2 * (var(--gauge-stroke) - var(--gauge-border)))/3);
 }

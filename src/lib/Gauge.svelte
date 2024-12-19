@@ -22,7 +22,8 @@
   export let titleAngle: number = 0;
   export let stroke: number = 20;
   export let titles: string[] = [];
-  export let ranges: [number, number][] = [];
+  let segments: [number, number][] = [];
+  export { segments as ranges };
   let className: string | undefined = undefined;
   export { className as class };
   let clientWidth: number;
@@ -34,7 +35,7 @@
   const uuid = Math.random().toString(36).slice(-6);
 
   // Animated value with easing
-  const animatedValue = tweened(start, { duration: 1000, easing: easing });
+  const animatedValue = tweened(start, { duration: 1000, easing });
   $: animatedValue.set(value ?? 0);
 
   // Set visibility on mount for animations
@@ -53,14 +54,14 @@
 </script>
 
 <div
-  class={`gauge-container ${className}`}
+  class={`gauge-container ${className ?? ""}`}
   bind:clientWidth
   bind:clientHeight
   style="
     {width ? `width: ${typeof width === 'string' ? width : width + 'px'};` : ''}
-    --gauge-stroke: {stroke}px;
-    --gauge-border: {border}px;
-    --gauge-radius: {Math.min(clientWidth, clientHeight) / 2}px"
+    {`--gauge-stroke: ${typeof stroke === 'string' ? stroke : stroke + 'px'};`}
+    {`--gauge-border: ${border}px;`}
+--gauge-radius: {Math.min(clientWidth, clientHeight) / 2}px"
 >
   {#if clientWidth > 0 && clientHeight > 0}
     {@const radius = Math.min(clientWidth, clientHeight) / 2}
@@ -68,20 +69,20 @@
     {@const handlePos = polarToCartesian(
       radius,
       borderAdjusted,
-      (scale($animatedValue, start, stop, startAngle, stopAngle) * Math.PI) /
-        180
+      scale($animatedValue, start, stop, startAngle, stopAngle) *
+        (Math.PI / 180)
     )}
 
-    <svg class="gauge-svg" xmlns="http://www.w3.org/2000/svg">
+    <svg class="gauge-visual" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        {#each ranges as range, index}
+        {#each segments as segment, index}
           <path
-            id={`range-${index}-${uuid}`}
+            id={`segment-${index}-${uuid}`}
             d={calcCurvePath(
               radius,
               borderAdjusted,
-              scale(range[0], start, stop, startAngle, stopAngle),
-              scale(range[1], start, stop, startAngle, stopAngle)
+              scale(segment[0], start, stop, startAngle, stopAngle),
+              scale(segment[1], start, stop, startAngle, stopAngle)
             )}
           />
         {/each}
@@ -98,7 +99,7 @@
 
       <!-- Titles -->
       {#if visible}
-        <text class="titles-container">
+        <text class="gauge-titles">
           {#each titles as title, index}
             <textPath
               xlink:href="#title-path-{uuid}"
@@ -114,37 +115,40 @@
             </textPath>
           {/each}
         </text>
+
+        <!-- Display Value -->
         {#if !$$slots.default}
           <text
-            class="slot-content"
+            class="gauge-slot-content"
             x="50%"
             y="50%"
             dominant-baseline="middle"
             text-anchor="middle"
-            >{typeof displayValue === "string"
+          >
+            {typeof displayValue === "string"
               ? displayValue
               : displayValue({
-                  value: value,
+                  value,
                   animatedValue: $animatedValue,
                   formattedValue:
                     $animatedValue === 0 && value === undefined
                       ? "NaN"
                       : Math.round($animatedValue).toString(),
-                })}</text
-          >
+                })}
+          </text>
         {/if}
       {/if}
 
       <!-- Background Circle -->
       <path
-        class="gauge-circle"
+        class="gauge-background"
         d={calcCurvePath(radius, borderAdjusted, startAngle, stopAngle)}
       />
 
       <!-- Value Background -->
       {#if value != undefined || $animatedValue != 0}
         <path
-          class="gauge-range-bg"
+          class="gauge-progress"
           d={calcCurvePath(
             radius,
             borderAdjusted,
@@ -153,23 +157,24 @@
           )}
         />
       {/if}
-      {#each ranges as range, index}
-        <use href="#range-{index}-{uuid}" class="gauge-range-bg"></use>
-        <use href="#range-{index}-{uuid}" class="gauge-range"></use>
+      {#each segments as _, index}
+        <use href="#segment-{index}-{uuid}" class="gauge-segment-bg"></use>
+        <use href="#segment-{index}-{uuid}" class="gauge-segment"></use>
       {/each}
 
       <!-- Handle -->
       {#if value != undefined || $animatedValue != 0}
         <circle
-          class="gauge-handle"
+          class="gauge-indicator"
           cx={handlePos.x}
           cy={handlePos.y}
           r={stroke / 2}
         />
       {/if}
     </svg>
+    <!-- Slot Content -->
     {#if !!$$slots.default}
-      <div class="slot-container">
+      <div class="gauge-slot-container">
         <slot
           value={$animatedValue === 0 && value === undefined
             ? undefined

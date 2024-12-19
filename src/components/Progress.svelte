@@ -29,10 +29,10 @@
     width: 125px;
     --stroke-color: #d43008;
 
-    :global(.slot-content) {
+    :global(.gauge-slot-content) {
       color: #d43008;
     }
-    :global(.gauge-handle) {
+    :global(.gauge-indicator) {
       display: none;
     }
   }

@@ -37,28 +37,24 @@
 <style lang="scss">
   :global(.gauge-dotted) {
     color: var(--stroke-color);
-    :global(.gauge-circle) {
+    :global(.gauge-background) {
       stroke: #777777;
-      stroke-dasharray: 2, 4;
     }
 
-    :global(.gauge-range-bg) {
+    :global(.gauge-progress),
+    :global(.gauge-background) {
       stroke-dasharray: 2, 4;
       stroke-linecap: butt;
     }
 
-    :global(.slot-content),
-    :global(.gauge-range-bg) {
+    :global(.gauge-slot-content),
+    :global(.gauge-segment-bg) {
       -webkit-filter: drop-shadow(0px 0px 3px var(--stroke-color));
       filter: drop-shadow(0px 0px 3px var(--stroke-color));
     }
 
-    :global(.gauge-handle) {
+    :global(.gauge-indicator) {
       display: none;
-    }
-
-    :global(.gauge-circle) {
-      stroke-linecap: butt;
     }
   }
 </style>
