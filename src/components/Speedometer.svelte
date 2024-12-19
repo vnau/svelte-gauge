@@ -21,7 +21,7 @@
   stopAngle={360 - 45}
   stroke={10}
   value={speed}
-  --stroke-color={palette[1]}
+  color={palette[1]}
 >
   <Gauge
     titles={Array.from(Array(11), (_, i) => (i * 1).toString())}
@@ -32,6 +32,6 @@
     ranges={[[8000, 10000]]}
     displayValue={Math.round(speed).toString()}
     value={rpm}
-    --stroke-color={palette[2]}
+    color={palette[2]}
   ></Gauge>
 </Gauge>

@@ -26,6 +26,8 @@
   export { segments as ranges };
   let className: string | undefined = undefined;
   export { className as class };
+  export let color: string | undefined = undefined;
+
   let clientWidth: number;
   let clientHeight: number;
   let visible = false;
@@ -60,6 +62,7 @@
   style="
     {width ? `width: ${typeof width === 'string' ? width : width + 'px'};` : ''}
     {`--gauge-stroke: ${typeof stroke === 'string' ? stroke : stroke + 'px'};`}
+    {color !== undefined ? `--stroke-color: ${color};` : ''}
     {`--gauge-border: ${border}px;`}
 --gauge-radius: {Math.min(clientWidth, clientHeight) / 2}px"
 >

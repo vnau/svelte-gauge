@@ -20,7 +20,7 @@
   stroke={10}
   ranges={Array.from(Array(12), (_, i) => [5 * i, 5 * i])}
   titles={Array.from(Array(12), (_, i) => (((i + 11) % 12) + 1).toString())}
-  --stroke-color={palette[0]}
+  color={palette[0]}
 >
   <Gauge
     startAngle={180}
@@ -30,7 +30,7 @@
     start={0}
     stop={60}
     stroke={20}
-    --stroke-color={palette[1]}
+    color={palette[1]}
     ><Gauge
       let:value
       startAngle={180}
@@ -40,7 +40,7 @@
       start={0}
       stop={12}
       stroke={30}
-      --stroke-color={palette[2]}
+      color={palette[2]}
       ><div
         style={`    top: 50%;
     left: 50%;

@@ -18,12 +18,12 @@
     "SwitchBot THX1/W230150X 34EF",
     "FRITZ!DECT 301 23515 0707002",
   ]}
-  --stroke-color={palette[1]}
+  color={palette[1]}
   ><Gauge
     stroke={10}
     value={4 * (value % 25)}
     ranges={[[45, 55]]}
-    --stroke-color={palette[2]}
+    color={palette[2]}
   >
     <div>
       <div class="slider-content">

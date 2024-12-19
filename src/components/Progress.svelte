@@ -12,6 +12,7 @@
     stroke={10}
     displayValue={(v) => v.formattedValue + "%"}
     titles={["", "we're doing something important"]}
+    color="#d43008"
     {value}
   />
 
@@ -20,6 +21,7 @@
     stroke={10}
     displayValue={(v) => v.formattedValue + "%"}
     titles={["∗", "who knows, maybe it will take forever"]}
+    color="#d43008"
     {value}
   />
 </div>
@@ -27,10 +29,9 @@
 <style lang="scss">
   :global(.progress) {
     width: 125px;
-    --stroke-color: #d43008;
 
     :global(.gauge-slot-content) {
-      color: #d43008;
+      color: var(--stroke-color);
     }
     :global(.gauge-indicator) {
       display: none;

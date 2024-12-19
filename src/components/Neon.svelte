@@ -11,7 +11,7 @@
 
 <div class="neon-container">
   <Gauge
-    --stroke-color="greenyellow"
+    color="greenyellow"
     titles={[" "]}
     stroke={10}
     class="gauge-dotted"
@@ -21,7 +21,7 @@
     let:value
   ></Gauge>
   <Gauge
-    --stroke-color="#5ad2f7"
+    color="#5ad2f7"
     titles={[" "]}
     stroke={10}
     startAngle={270}
