@@ -4,7 +4,7 @@
   import { cubicOut } from "svelte/easing";
   import {
     calcCurvePath,
-    getTitleOffset,
+    calcLabelOffset,
     polarToCartesian,
     scale,
     type DisplayValueHandler,
@@ -19,9 +19,9 @@
   export let stop: number = 100;
   export let startAngle: number = 0;
   export let stopAngle: number = 360;
-  export let titleAngle: number = 0;
   export let stroke: number = 20;
   export let titles: string[] = [];
+  export let labelsCentered: boolean = false;
   let segments: [number, number][] = [];
   export { segments as ranges };
   let className: string | undefined = undefined;
@@ -94,8 +94,8 @@
           d={calcCurvePath(
             radius,
             border - 2,
-            titleAngle + startAngle - (stopAngle - startAngle) / 2.001,
-            titleAngle + stopAngle + (stopAngle - startAngle) / 2.001
+            startAngle - (stopAngle - startAngle) / 2,
+            stopAngle + (stopAngle - startAngle) / 2
           )}
         />
       </defs>
@@ -106,11 +106,10 @@
           {#each titles as title, index}
             <textPath
               xlink:href="#title-path-{uuid}"
-              startOffset="{getTitleOffset(
-                startAngle,
-                stopAngle,
+              startOffset="{calcLabelOffset(
                 index,
-                titles.length
+                titles.length,
+                labelsCentered
               )}%"
               text-anchor="middle"
             >

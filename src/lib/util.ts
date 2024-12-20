@@ -1,5 +1,5 @@
 // Clamp value between min and max
-export const clamp = (value: number, min: number, max: number): number =>
+const clamp = (value: number, min: number, max: number): number =>
     Math.max(min, Math.min(max, value));
 
 export const scale = (
@@ -11,17 +11,14 @@ export const scale = (
 ): number =>
     targetStart + ((targetStop - targetStart) * (clamp(value, start, stop) - start)) / (stop - start);
 
-// Calculate title offset based on index and total count
-export const getTitleOffset = (
-    startAngle: number,
-    stopAngle: number,
+// Calculate label offset based on index and total number of labels
+export const calcLabelOffset = (
     index: number,
-    count: number
+    count: number,
+    center: boolean
 ): number => {
-    const fullCircle = 360;
-    const isCircleGauge = Math.abs(stopAngle - startAngle - fullCircle) < 0.001;
-    const normalizedIndex = index / (count - (isCircleGauge || count === 1 ? 0 : 1));
-    return 25 + (50 * normalizedIndex); // Simplified formula
+    const c = (count === 1 && !center) ? 0 : (index + (center ? 0.5 : 0)) / (count - (center ? 0 : 1));
+    return Math.round((25 + 50 * c) * 100) / 100;
 };
 
 // Convert polar coordinates to Cartesian
@@ -58,7 +55,7 @@ export const calcCurvePath = (radius: number, offset: number, startAngle: number
     let cmd = `M ${startPoint.x} ${startPoint.y}`;
     let arcStart = startRad
     do {
-        const arcStop = arcStart + Math.min(Math.PI * 2, endRad - arcStart)
+        const arcStop = arcStart + Math.min(Math.PI * 1.9999, endRad - arcStart)
         cmd += ` ${arcCommand(arcStart, arcStop)}`;
         arcStart = arcStop;
     } while (arcStart < endRad)

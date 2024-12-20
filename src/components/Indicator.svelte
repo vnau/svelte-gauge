@@ -11,11 +11,11 @@
 <Gauge
   stroke={10}
   width={250}
-  titleAngle={180}
+  labelsCentered={true}
   {value}
   titles={[
-    "Central office",
     "SwitchBot THX1/W230150X 34EF",
+    "Central office",
     "FRITZ!DECT 301 23515 0707002",
   ]}
   color={palette[1]}

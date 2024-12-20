@@ -15,7 +15,7 @@
     titles={[" "]}
     stroke={10}
     class="gauge-dotted"
-    width={150}
+    width={125}
     displayValue={(v) => v.formattedValue + "dB"}
     {value}
     let:value
