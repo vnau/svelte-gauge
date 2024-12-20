@@ -16,7 +16,7 @@
 <Gauge
   width={250}
   stop={200}
-  titles={Array.from(Array(11), (_, i) => (i * 20).toString())}
+  labels={Array.from(Array(11), (_, i) => (i * 20).toString())}
   startAngle={45}
   stopAngle={360 - 45}
   stroke={10}
@@ -24,12 +24,12 @@
   color={palette[1]}
 >
   <Gauge
-    titles={Array.from(Array(11), (_, i) => (i * 1).toString())}
+    labels={Array.from(Array(11), (_, i) => (i * 1).toString())}
     stop={10000}
     startAngle={45}
     stopAngle={360 - 45}
     stroke={10}
-    ranges={[[8000, 10000]]}
+    segments={[[8000, 10000]]}
     displayValue={Math.round(speed).toString()}
     value={rpm}
     color={palette[2]}

@@ -20,10 +20,9 @@
   export let startAngle: number = 0;
   export let stopAngle: number = 360;
   export let stroke: number = 20;
-  export let titles: string[] = [];
+  export let labels: string[] = [];
   export let labelsCentered: boolean = false;
-  let segments: [number, number][] = [];
-  export { segments as ranges };
+  export let segments: [number, number][] = [];
   let className: string | undefined = undefined;
   export { className as class };
   export let color: string | undefined = undefined;
@@ -32,8 +31,8 @@
   let clientHeight: number;
   let visible = false;
 
-  // Check if any title is present
-  const border = titles.some(Boolean) ? 16 : 0;
+  // Check if any label is present
+  const border = labels.some(Boolean) ? 16 : 0;
   const uuid = Math.random().toString(36).slice(-6);
 
   // Animated value with easing
@@ -90,7 +89,7 @@
           />
         {/each}
         <path
-          id="title-path-{uuid}"
+          id="labels-path-{uuid}"
           d={calcCurvePath(
             radius,
             border - 2,
@@ -100,20 +99,20 @@
         />
       </defs>
 
-      <!-- Titles -->
+      <!-- Labels -->
       {#if visible}
-        <text class="gauge-titles">
-          {#each titles as title, index}
+        <text class="gauge-labels">
+          {#each labels as label, index}
             <textPath
-              xlink:href="#title-path-{uuid}"
+              xlink:href="#labels-path-{uuid}"
               startOffset="{calcLabelOffset(
                 index,
-                titles.length,
+                labels.length,
                 labelsCentered
               )}%"
               text-anchor="middle"
             >
-              {title}
+              {label}
             </textPath>
           {/each}
         </text>

@@ -12,7 +12,7 @@
 <div class="neon-container">
   <Gauge
     color="greenyellow"
-    titles={[" "]}
+    labels={[" "]}
     stroke={10}
     class="gauge-dotted"
     width={125}
@@ -22,7 +22,7 @@
   ></Gauge>
   <Gauge
     color="#5ad2f7"
-    titles={[" "]}
+    labels={[" "]}
     stroke={10}
     startAngle={270}
     stopAngle={90}

@@ -18,8 +18,8 @@
   start={0}
   stop={60}
   stroke={10}
-  ranges={Array.from(Array(12), (_, i) => [5 * i, 5 * i])}
-  titles={Array.from(Array(13), (_, i) => (((i + 11) % 12) + 1).toString())}
+  segments={Array.from(Array(12), (_, i) => [5 * i, 5 * i])}
+  labels={Array.from(Array(13), (_, i) => (((i + 11) % 12) + 1).toString())}
   color={palette[0]}
 >
   <Gauge

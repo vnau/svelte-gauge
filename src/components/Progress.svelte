@@ -11,7 +11,7 @@
     class="progress"
     stroke={10}
     displayValue={(v) => v.formattedValue + "%"}
-    titles={["∗", "we're doing something important", ""]}
+    labels={["∗", "we're doing something important", ""]}
     color="#d43008"
     {value}
   />
@@ -20,7 +20,7 @@
     class="progress"
     stroke={10}
     displayValue={(v) => v.formattedValue + "%"}
-    titles={["∗", "who knows, maybe it will take forever", ""]}
+    labels={["∗", "who knows, maybe it will take forever", ""]}
     color="#d43008"
     {value}
   />

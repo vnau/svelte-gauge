@@ -13,7 +13,7 @@
   width={250}
   labelsCentered={true}
   {value}
-  titles={[
+  labels={[
     "SwitchBot THX1/W230150X 34EF",
     "Central office",
     "FRITZ!DECT 301 23515 0707002",
@@ -22,7 +22,7 @@
   ><Gauge
     stroke={10}
     value={4 * (value % 25)}
-    ranges={[[45, 55]]}
+    segments={[[45, 55]]}
     color={palette[2]}
   >
     <div>

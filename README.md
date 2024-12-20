@@ -36,8 +36,9 @@ Import the component and use it in your Svelte application:
   start={0}
   stop={100}
   stroke={20}
-  titles={["One", "Two", "Three"]}
-  ranges={[
+  color={"red"}
+  labels={["One", "Two", "Three"]}
+  segments={[
     [0, 33],
     [34, 66],
     [67, 100],
