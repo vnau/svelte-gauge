@@ -69,3 +69,10 @@ export type DisplayValueHandler = (args: {
     animatedValue: number;
     formattedValue: string;
 }) => string;
+
+export type Segment = {
+    start: number;
+    stop: number;
+    color?: string;
+    label?: string;
+} | [number, number]

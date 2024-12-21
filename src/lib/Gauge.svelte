@@ -8,6 +8,7 @@
     polarToCartesian,
     scale,
     type DisplayValueHandler,
+    type Segment,
   } from "./util.js";
 
   export let easing: (v: number) => number = cubicOut;
@@ -22,7 +23,7 @@
   export let stroke: number = 20;
   export let labels: string[] = [];
   export let labelsCentered: boolean = false;
-  export let segments: [number, number][] = [];
+  export let segments: Segment[] = [];
   let className: string | undefined = undefined;
   export { className as class };
   export let color: string | undefined = undefined;
@@ -83,8 +84,20 @@
             d={calcCurvePath(
               radius,
               borderAdjusted,
-              scale(segment[0], start, stop, startAngle, stopAngle),
-              scale(segment[1], start, stop, startAngle, stopAngle)
+              scale(
+                "start" in segment ? segment.start : segment[0],
+                start,
+                stop,
+                startAngle,
+                stopAngle
+              ),
+              scale(
+                "stop" in segment ? segment.stop : segment[1],
+                start,
+                stop,
+                startAngle,
+                stopAngle
+              )
             )}
           />
         {/each}
@@ -119,13 +132,7 @@
 
         <!-- Display Value -->
         {#if !$$slots.default}
-          <text
-            class="gauge-slot-content"
-            x="50%"
-            y="50%"
-            dominant-baseline="middle"
-            text-anchor="middle"
-          >
+          <text class="gauge-slot-content" x="50%" y="50%">
             {typeof displayValue === "string"
               ? displayValue
               : displayValue({
@@ -158,9 +165,24 @@
           )}
         />
       {/if}
-      {#each segments as _, index}
-        <use href="#segment-{index}-{uuid}" class="gauge-segment-bg"></use>
-        <use href="#segment-{index}-{uuid}" class="gauge-segment"></use>
+
+      <!-- Segments -->
+      {#each segments as segment, index}
+        <g
+          style={"color" in segment && segment.color
+            ? `--segment-color: ${segment.color}`
+            : ""}
+        >
+          <use href="#segment-{index}-{uuid}" class="gauge-segment-bg" />
+          <use href="#segment-{index}-{uuid}" class="gauge-segment" />
+          {#if "label" in segment && segment.label}
+            <text class="gauge-segment-label">
+              <textPath startOffset="50%" xlink:href="#segment-{index}-{uuid}">
+                {segment.label}
+              </textPath>
+            </text>
+          {/if}
+        </g>
       {/each}
 
       <!-- Handle -->

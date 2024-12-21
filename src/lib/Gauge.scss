@@ -1,6 +1,7 @@
 .gauge-container {
   position: relative;
   aspect-ratio: 1;
+  --segment-color: #ffffff80;
 }
 
 .gauge-visual {
@@ -32,9 +33,8 @@
 
 .gauge-segment {
   @extend .gauge-arc;
-  stroke: white;
+  stroke: var(--segment-color);
   stroke-width: calc(var(--gauge-stroke) - 2px);
-  opacity: 0.5;
 }
 
 .gauge-indicator {
@@ -62,4 +62,12 @@
 .gauge-slot-content {
   fill: currentColor;
   font-size: calc((var(--gauge-radius) - 2 * (var(--gauge-stroke) - var(--gauge-border)))/3);
+  dominant-baseline: central;
+  text-anchor: middle;
+}
+
+.gauge-segment-label {
+  dominant-baseline: central;
+  font-size: var(--gauge-stroke);
+  text-anchor: middle;
 }

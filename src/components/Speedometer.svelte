@@ -9,14 +9,14 @@
   setInterval(() => {
     const time = (Date.now() % 6000) / 5000;
     speed = cubicIn(time) * 100;
-    rpm = cubicOut(time) * 8000;
+    rpm = cubicOut(time) * 9000;
   });
 </script>
 
 <Gauge
   width={250}
   stop={200}
-  labels={Array.from(Array(11), (_, i) => (i * 20).toString())}
+  labels={Array.from(Array(21), (_, i) => (i % 2 ? "" : (i * 10).toString()))}
   startAngle={45}
   stopAngle={360 - 45}
   stroke={10}
@@ -29,7 +29,7 @@
     startAngle={45}
     stopAngle={360 - 45}
     stroke={10}
-    segments={[[8000, 10000]]}
+    segments={[{ start: 8000, stop: 10000, color: "#d4300850" }]}
     displayValue={Math.round(speed).toString()}
     value={rpm}
     color={palette[2]}
