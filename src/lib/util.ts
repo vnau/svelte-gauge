@@ -34,33 +34,86 @@ export const polarToCartesian = (
     };
 };
 
-// Generate SVG path for an arc
-export const calcCurvePath = (radius: number, offset: number, startAngle: number, endAngle: number): string => {
-    const toRadians = (angle: number) => (angle * Math.PI) / 180;
-    const startRad = toRadians(startAngle);
-    const endRad = toRadians(endAngle);
+function lineIntersection(m1: number, b1: number, m2: number, b2: number) {
+    if (m1 === m2)
+        return undefined;
 
-    const startPoint = polarToCartesian(radius, offset, startRad);
+    const x = (b2 - b1) / (m1 - m2);
+    return { x: x, y: m1 * x + b1 };
+}
 
-    // Helper to generate an arc command for SVG path
-    const arcCommand = (fromAngle: number, toAngle: number): string => {
-        toAngle = Math.min(toAngle, fromAngle + Math.PI * 1.9999)
-        const endPoint = polarToCartesian(radius, offset, toAngle);
-        const largeArcFlag = toAngle - fromAngle > Math.PI ? 1 : 0;
-        const sweepFlag = toAngle > fromAngle ? 1 : 0;
-        return `A ${radius - offset} ${radius - offset} 0 ${largeArcFlag} ${sweepFlag} ${endPoint.x} ${endPoint.y}`;
+function pStr(point: { x: number, y: number }) {
+    return `${point.x.toFixed(2)},${point.y.toFixed(2)} `;
+}
+
+function getPath(center: { x: number, y: number }, startRadius: number, spacePerLoop: number, startTheta: number, endTheta: number, thetaStep: number) {
+    // Rename spiral parameters for the formula r = a + bθ
+    const a = startRadius;  // start distance from center
+    const b = spacePerLoop / Math.PI / 2; // space between each loop
+
+    // convert angles to radians
+    let oldTheta = startTheta * Math.PI / 180;
+    let newTheta = oldTheta;
+    endTheta = endTheta * Math.PI / 180;
+    thetaStep = thetaStep * Math.PI / 180;
+
+    // radii
+    let oldR,
+        newR = a + b * newTheta;
+
+    // start and end points
+    const oldPoint = { x: 0, y: 0 };
+    const newPoint = {
+        x: center.x + newR * Math.cos(newTheta),
+        y: center.y + newR * Math.sin(newTheta)
     };
 
-    // Determine whether to split into two arcs for full circles
-    let cmd = `M ${startPoint.x} ${startPoint.y}`;
-    let arcStart = startRad
-    do {
-        const arcStop = arcStart + Math.min(Math.PI * 1.9999, endRad - arcStart)
-        cmd += ` ${arcCommand(arcStart, arcStop)}`;
-        arcStart = arcStop;
-    } while (arcStart < endRad)
+    // slopes of tangents
+    let oldSlope: number = 0;
+    let newSlope: number = (b * Math.sin(oldTheta) + (a + b * newTheta) * Math.cos(oldTheta)) /
+        (b * Math.cos(oldTheta) - (a + b * newTheta) * Math.sin(oldTheta));
 
-    return cmd;
+    let path = "M " + pStr(newPoint);
+
+    while (oldTheta < endTheta) {
+        oldTheta = newTheta;
+        newTheta += Math.min(thetaStep, endTheta - oldTheta);
+
+        oldR = newR;
+        newR = a + b * newTheta;
+
+        oldPoint.x = newPoint.x;
+        oldPoint.y = newPoint.y;
+        newPoint.x = center.x + newR * Math.cos(newTheta);
+        newPoint.y = center.y + newR * Math.sin(newTheta);
+
+        // Slope calculation with the formula:
+        // (b * sinΘ + (a + bΘ) * cosΘ) / (b * cosΘ - (a + bΘ) * sinΘ)
+        const aPlusBTheta = a + b * newTheta;
+
+        oldSlope = newSlope;
+        newSlope = (b * Math.sin(newTheta) + aPlusBTheta * Math.cos(newTheta)) /
+            (b * Math.cos(newTheta) - aPlusBTheta * Math.sin(newTheta));
+
+        const oldIntercept = -(oldSlope * oldR * Math.cos(oldTheta) - oldR * Math.sin(oldTheta));
+        const newIntercept = -(newSlope * newR * Math.cos(newTheta) - newR * Math.sin(newTheta));
+
+        const controlPoint = lineIntersection(oldSlope, oldIntercept, newSlope, newIntercept);
+        if (controlPoint) {
+            // Offset the control point by the center offset.
+            controlPoint.x += center.x;
+            controlPoint.y += center.y;
+
+            path += "Q " + pStr(controlPoint) + pStr(newPoint);
+        }
+    }
+
+    return path;
+}
+
+// Generate SVG path for an arc
+export const calcCurvePath = (radius: number, offset: number, startAngle: number, endAngle: number): string => {
+    return getPath({ x: radius, y: radius }, radius - offset, -offset / 2, startAngle + 90, endAngle + 90, 10);
 };
 
 // Define a type for the display value handler
