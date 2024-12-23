@@ -5,7 +5,7 @@
     value = Math.min(100, Math.round((Date.now() % 12000) / 100));
   }, 500);
 
-  const palette = ["#ffffff", "#e41376", "#01c8ee"];
+  const palette = ["#ffffff", "#e41376", "#01c8eec0"];
 </script>
 
 <Gauge
@@ -41,8 +41,8 @@
         <div>☀</div>
       </div>
     </div>
-  </Gauge></Gauge
->
+  </Gauge>
+</Gauge>
 
 <style lang="scss">
   .slider-content {

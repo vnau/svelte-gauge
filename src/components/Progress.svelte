@@ -17,11 +17,17 @@
   />
 
   <Gauge
-    class="progress"
-    stroke={10}
-    displayValue={(v) => v.formattedValue + "%"}
-    labels={["∗", "who knows, maybe it will take forever", ""]}
-    color="#d43008"
+    class="segmented"
+    stroke={15}
+    startAngle={40}
+    stopAngle={320}
+    displayValue={""}
+    segments={[
+      { start: 0, stop: 33, color: "#f6a944", label: "Low" },
+      { start: 33, stop: 66, color: "#8a9305", label: "Medium" },
+      { start: 66, stop: 100, color: "#e62f48", label: "High" },
+    ]}
+    color="white"
     {value}
   />
 </div>
@@ -33,8 +39,20 @@
     :global(.gauge-slot-content) {
       color: var(--stroke-color);
     }
-    :global(.gauge-indicator) {
+    :global(.gauge-pointer) {
       display: none;
+    }
+  }
+
+  :global(.segmented) {
+    width: 125px;
+
+    :global(.gauge-progress) {
+      display: none;
+    }
+
+    :global(.gauge-pointer) {
+      fill: white;
     }
   }
 </style>

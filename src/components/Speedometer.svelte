@@ -1,7 +1,7 @@
 <script lang="ts">
   import Gauge from "$lib/Gauge.svelte";
   import { cubicIn, cubicOut } from "svelte/easing";
-  const palette = ["#ffffff", "#d43008", "#666666"];
+  const palette = ["#ffffff", "#d43008", "#666666c0"];
 
   let speed = 0;
   let rpm = 0;
@@ -29,7 +29,7 @@
     startAngle={45}
     stopAngle={360 - 45}
     stroke={10}
-    segments={[{ start: 8000, stop: 10000, color: "#d4300850" }]}
+    segments={[{ start: 8000, stop: 10000, color: "#d43008" }]}
     displayValue={Math.round(speed).toString()}
     value={rpm}
     color={palette[2]}
