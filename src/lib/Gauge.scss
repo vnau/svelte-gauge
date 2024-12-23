@@ -37,7 +37,7 @@
   stroke-width: calc(var(--gauge-stroke) - 2px);
 }
 
-.gauge-indicator {
+.gauge-pointer {
   fill: white;
   stroke: var(--stroke-color, lightgray);
   stroke-width: 1px;

@@ -147,24 +147,11 @@
         {/if}
       {/if}
 
-      <!-- Background Circle -->
+      <!-- Background arc -->
       <path
         class="gauge-background"
         d={calcCurvePath(radius, borderAdjusted, startAngle, stopAngle)}
       />
-
-      <!-- Value Background -->
-      {#if value != undefined || $animatedValue != 0}
-        <path
-          class="gauge-progress"
-          d={calcCurvePath(
-            radius,
-            borderAdjusted,
-            startAngle,
-            scale($animatedValue, start, stop, startAngle, stopAngle)
-          )}
-        />
-      {/if}
 
       <!-- Segments -->
       {#each segments as segment, index}
@@ -185,10 +172,23 @@
         </g>
       {/each}
 
+      <!-- Progress arc -->
+      {#if value != undefined || $animatedValue != 0}
+        <path
+          class="gauge-progress"
+          d={calcCurvePath(
+            radius,
+            borderAdjusted,
+            startAngle,
+            scale($animatedValue, start, stop, startAngle, stopAngle)
+          )}
+        />
+      {/if}
+
       <!-- Handle -->
       {#if value != undefined || $animatedValue != 0}
         <circle
-          class="gauge-indicator"
+          class="gauge-pointer"
           cx={handlePos.x}
           cy={handlePos.y}
           r={stroke / 2}
