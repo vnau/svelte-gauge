@@ -1,13 +1,12 @@
 # Svelte Gauge
 
 [![npm](https://img.shields.io/npm/v/svelte-gauge.svg)](https://www.npmjs.com/package/svelte-gauge)
-[![bundle size](https://img.shields.io/bundlephobia/minzip/svelte-gauge)](https://bundlephobia.com/package/svelte-gauge)
 [![downloads](https://img.shields.io/npm/dw/svelte-gauge)](https://www.npmjs.com/package/svelte-gauge)
 [![License](https://img.shields.io/npm/l/svelte-gauge.svg)](LICENSE)
 
 A customizable and animated gauge component built with Svelte, perfect for visualizing progress, performance metrics, or other numerical data.
 
-<img width="100%" alt="svelte.gauge preview" src="images/banner.png">
+[<img width="100%" alt="svelte.gauge preview" src="images/banner.png">](https://elebree.github.io/svelte-gauge/)
 
 ## 🎮 Demo
 
